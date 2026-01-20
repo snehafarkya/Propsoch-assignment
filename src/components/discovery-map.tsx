@@ -170,81 +170,84 @@ export default function DiscoveryMap({
               }}
             >
               <Popup
-                minWidth={380}
+                minWidth={400}
                 offset={[0, -20]}
                 autoPan
                 autoPanPadding={[40, 40]}
                 keepInView
               >
-                <Link
-                  href={`/property-for-sale-in/${project.city.toLowerCase()}/${project.slug.toLowerCase()}/${
-                    project.id
-                  }`}
-                  target="_blank"
-                  className="block"
+                <div
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onWheel={(e) => e.stopPropagation()}
                 >
-                  <div className="flex gap-3 bg-white text-gray-600">
-                    {/* IMAGE */}
-                    <div className="relative w-40 shrink-0">
-                      <Image
-                        src={project.image}
-                        alt={project.alt}
-                        fill
-                        className={cn(
-                          "object-cover",
-                          project.projectStatus === "soldOut" && "grayscale"
-                        )}
-                      />
-                    </div>
-
-                    {/* CONTENT */}
-                    <div className="flex flex-1 flex-col gap-2">
-                      <h3 className="line-clamp-2 text-base font-semibold text-black">
-                        {project.name}
-                      </h3>
-
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="flex items-center gap-1">
-                          <LocationIcon width={18} height={18} />
-                          {project.micromarket}
-                        </span>
-                        <PropscoreRating
-                          rating={project.propscore}
-                          width={90}
-                          height={20}
+                  <Link
+                    href={`/property-for-sale-in/${project.city.toLowerCase()}/${project.slug.toLowerCase()}/${
+                      project.id
+                    }`}
+                    target="_blank"
+                    className="block"
+                  >
+                    <div className="flex gap-3 bg-white text-gray-600">
+                      <div className="relative w-40 shrink-0">
+                        <Image
+                          src={project.image}
+                          alt={project.alt}
+                          fill
+                          className={cn(
+                            "object-cover",
+                            project.projectStatus === "soldOut" && "grayscale"
+                          )}
                         />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 border-b border-gray-300 pb-2 text-xs">
-                        <span className="flex items-center gap-1">
-                          <BudgetIcon width={18} height={18} />
-                          {formatPrice(project.minPrice, false)} –{" "}
-                          {formatPrice(project.maxPrice, false)}
-                        </span>
+                      <div className="flex flex-1 flex-col gap-2">
+                        <h3 className="line-clamp-2 text-base font-semibold text-black">
+                          {project.name}
+                        </h3>
 
-                        <span className="flex items-center gap-1">
-                          <HouseIcon width={18} height={18} />
-                          {concatenateTypologies(project.typologies)}
-                        </span>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="flex items-center gap-1">
+                            <LocationIcon width={18} height={18} />
+                            {project.micromarket}
+                          </span>
+                          <PropscoreRating
+                            rating={project.propscore}
+                            width={90}
+                            height={20}
+                          />
+                        </div>
 
-                        <span className="flex items-center gap-1">
-                          <CalendarIcon width={18} height={18} />
-                          {formatDate(project.possessionDate)}
-                        </span>
+                        <div className="grid grid-cols-2 gap-2 border-b border-gray-300 pb-2 text-xs">
+                          <span className="flex items-center gap-1">
+                            <BudgetIcon width={18} height={18} />
+                            {formatPrice(project.minPrice, false)} –{" "}
+                            {formatPrice(project.maxPrice, false)}
+                          </span>
 
-                        <span className="flex items-center gap-1">
-                          <LandAreaIcon width={18} height={18} />
-                          {project.minSaleableArea}–{project.maxSaleableArea}{" "}
-                          sqft
-                        </span>
-                      </div>
+                          <span className="flex items-center gap-1">
+                            <HouseIcon width={18} height={18} />
+                            {concatenateTypologies(project.typologies)}
+                          </span>
 
-                      <div className=" text-right text-xs font-medium text-purple-600 hover:underline">
-                        View Details 
+                          <span className="flex items-center gap-1">
+                            <CalendarIcon width={18} height={18} />
+                            {formatDate(project.possessionDate)}
+                          </span>
+
+                          <span className="flex items-center gap-1">
+                            <LandAreaIcon width={18} height={18} />
+                            {project.minSaleableArea}–{project.maxSaleableArea}{" "}
+                            sqft
+                          </span>
+                        </div>
+
+                        <div className=" text-right text-xs font-medium text-purple-600 hover:underline">
+                          View Details
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               </Popup>
             </Marker>
           ))}

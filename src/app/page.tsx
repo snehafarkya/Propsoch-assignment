@@ -34,7 +34,7 @@ export default async function Page({
   return (
     <main className="min-h-screen w-full bg-gray-50 text-black">
       <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 py-8 sm:px-6">
-        <header className="flex flex-col items-center gap-3 text-center">
+        <header className="flex flex-col gap-1 ">
           <h1 className="text-4xl font-bold text-purple-600">
             Property Listings
           </h1>

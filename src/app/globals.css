@@ -36,3 +36,20 @@ html,body{
           transform: translateX(-50%);
         }
 }
+
+.leaflet-popup-close-button {
+  top: 10px !important;
+  right: 10px !important;
+  font-size: 18px;
+}
+
+/* Allow touch scrolling inside popup */
+.leaflet-popup-content {
+  touch-action: pan-x pan-y !important;
+  overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+
