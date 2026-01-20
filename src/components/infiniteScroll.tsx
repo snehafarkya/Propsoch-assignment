@@ -1,5 +1,3 @@
-"use client";
-
 const demoItems = [
   { stats: "2750+", caption: "Hours of advice" },
   { stats: "520M+", caption: "Sq. feet analysed" },
@@ -22,18 +20,6 @@ export default function InfiniteHorizontalScroll() {
           <StatCard key={index} item={item} />
         ))}
       </div>
-
-      {/* Global keyframes */}
-      <style>{`
-        @keyframes scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-      `}</style>
     </div>
   );
 }

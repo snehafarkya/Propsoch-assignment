@@ -9,7 +9,6 @@ import { projectListing } from "@/types/types";
 import { PropscoreRating } from "@/assets/PropsochRating";
 import { BudgetIcon } from "@/assets/budget-icon";
 import { LocationIcon } from "@/assets/location-icon";
-import { CalendarIcon } from "@/assets/utility";
 
 interface PropertyListProps {
   properties: projectListing[];
@@ -68,11 +67,11 @@ export default function PropertyList({ properties }: PropertyListProps) {
                 width={100}
                 height={22}
               />
-              <p className="text-purple-600 font-bold absolute top-4 right-4 text-md">
+              <p className="text-purple-600 flex items-center font-bold absolute top-4 right-4 text-md">
                 <BudgetIcon
                   width={22}
                   height={22}
-                  className="inline-block mr-1 text-purple-600"
+                  className="inline-block  text-purple-600"
                 />
                 {formatPrice(property.minPrice, false)} –{" "}
                 {formatPrice(property.maxPrice, false)}

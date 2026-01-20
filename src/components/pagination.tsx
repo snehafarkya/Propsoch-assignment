@@ -17,9 +17,9 @@ export default function Pagination({
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
-  const half = Math.floor(maxVisiblePages / 2);
+  const windowRadius = Math.floor(maxVisiblePages / 2);
 
-  let startPage = Math.max(1, currentPage - half);
+  let startPage = Math.max(1, currentPage - windowRadius);
   let endPage = startPage + maxVisiblePages - 1;
 
   if (endPage > totalPages) {
@@ -37,6 +37,18 @@ export default function Pagination({
     query: { ...query, page },
   });
 
+  const navButtonClass = (disabled: boolean) =>
+    `rounded-md border px-3 py-2 text-sm transition ${
+      disabled
+        ? "pointer-events-none opacity-40"
+        : "bg-white hover:bg-gray-100"
+    }`;
+
+  const pageButtonClass = (active: boolean) =>
+    `rounded-md px-4 py-2 text-sm transition ${
+      active ? "bg-black text-white" : "bg-white hover:bg-gray-100"
+    }`;
+
   return (
     <nav
       className="flex items-center justify-center gap-2"
@@ -46,11 +58,8 @@ export default function Pagination({
       <Link
         href={buildHref(Math.max(1, currentPage - 1))}
         aria-disabled={currentPage === 1}
-        className={`rounded-md border px-3 py-2 text-sm transition ${
-          currentPage === 1
-            ? "pointer-events-none opacity-40"
-            : "bg-white hover:bg-gray-100"
-        }`}
+        tabIndex={currentPage === 1 ? -1 : 0}
+        className={navButtonClass(currentPage === 1)}
       >
         Prev
       </Link>
@@ -64,11 +73,7 @@ export default function Pagination({
             key={page}
             href={buildHref(page)}
             aria-current={isActive ? "page" : undefined}
-            className={`rounded-md px-4 py-2 text-sm transition ${
-              isActive
-                ? "bg-black text-white"
-                : "bg-white hover:bg-gray-100"
-            }`}
+            className={pageButtonClass(isActive)}
           >
             {page}
           </Link>
@@ -79,11 +84,8 @@ export default function Pagination({
       <Link
         href={buildHref(Math.min(totalPages, currentPage + 1))}
         aria-disabled={currentPage === totalPages}
-        className={`rounded-md border px-3 py-2 text-sm transition ${
-          currentPage === totalPages
-            ? "pointer-events-none opacity-40"
-            : "bg-white hover:bg-gray-100"
-        }`}
+        tabIndex={currentPage === totalPages ? -1 : 0}
+        className={navButtonClass(currentPage === totalPages)}
       >
         Next
       </Link>

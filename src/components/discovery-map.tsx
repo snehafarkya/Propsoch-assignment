@@ -5,7 +5,6 @@ import "leaflet/dist/leaflet.css";
 import { JSX, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import {
   LayersControl,
   MapContainer,
@@ -32,11 +31,9 @@ import {
   concatenateTypologies,
   formatDate,
   formatPrice,
-  para,
 } from "@/utils/helpers";
 import { projectListing } from "@/types/types";
 import { Badge } from "./badge";
-
 
 type MapLocation = {
   lat: number;
@@ -44,37 +41,19 @@ type MapLocation = {
   name: string;
 };
 
-/* --------------------------------------------
-   ICON RENDERER
----------------------------------------------*/
-const renderIcon = (
-  icon: JSX.Element,
-  ariaLabel: string,
-  transform: string
-) =>
+const renderIcon = (icon: JSX.Element, ariaLabel: string, transform: string) =>
   `<div style="transform:${transform}" aria-label="${ariaLabel}" role="button">
     ${renderToString(icon)}
   </div>`;
 
-function getOtherLocationIcon(
-  label: string,
-  isSelected: boolean
-): L.DivIcon {
+function getPropertyMarkerIcon(label: string, isSelected: boolean): L.DivIcon {
   return L.divIcon({
     html: renderIcon(
-      <div className="flex items-center gap-1">
-        <LandmarkIcon
-          width={16}
-          height={16}
-          color="#6B21A8"
-          className="shrink-0"
-        />
+      <div className="flex items-center ">
+        <LandmarkIcon width={16} height={16} className="shrink-0" />
         <Badge
           variant="white"
-          className={cn(
-            "whitespace-nowrap text-sm font-semibold transition-all",
-            isSelected 
-          )}
+          className={cn("whitespace-nowrap text-sm font-semibold", isSelected)}
         >
           {label}
         </Badge>
@@ -87,10 +66,7 @@ function getOtherLocationIcon(
     popupAnchor: [0, -28],
   });
 }
-
-/* --------------------------------------------
-   MAP HELPERS
----------------------------------------------*/
+// map click handler to reset selected location
 function MapClickHandler({ onClick }: { onClick: () => void }) {
   useMapEvents({ click: onClick });
   return null;
@@ -116,35 +92,28 @@ function MapController({
   return null;
 }
 
-/* --------------------------------------------
-   MAIN COMPONENT
----------------------------------------------*/
 export default function DiscoveryMap({
   allFilteredData,
 }: {
   allFilteredData: { projects: projectListing[] };
 }) {
-  const [selectedLocation, setSelectedLocation] =
-    useState<MapLocation | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<MapLocation | null>(
+    null
+  );
 
   const markerRefs = useRef<Record<string, LeafletMarker | null>>({});
 
-  /* --------------------------------------------
-     DERIVED PROPERTY (NO EFFECT!)
-  ---------------------------------------------*/
+  // find the selected property based on selectedLocation
   const selectedProperty = useMemo(() => {
     if (!selectedLocation) return null;
 
     return (
-      allFilteredData.projects.find(
-        (p) => p.name === selectedLocation.name
-      ) ?? null
+      allFilteredData.projects.find((p) => p.name === selectedLocation.name) ??
+      null
     );
   }, [selectedLocation, allFilteredData.projects]);
 
-  /* --------------------------------------------
-     OPEN POPUP WHEN PROPERTY CHANGES
-  ---------------------------------------------*/
+  // open popup of selected property marker
   useEffect(() => {
     if (selectedProperty) {
       markerRefs.current[selectedProperty.id]?.openPopup();
@@ -153,6 +122,7 @@ export default function DiscoveryMap({
 
   return (
     <section className="h-screen w-screen">
+      {/*Map container */}
       <MapContainer
         center={[12.97, 77.59]}
         zoom={12}
@@ -172,6 +142,7 @@ export default function DiscoveryMap({
         <MapClickHandler onClick={() => setSelectedLocation(null)} />
         <MapController selectedLocation={selectedLocation} />
 
+        {/* markers overlap solution */}
         <MarkerClusterGroup
           chunkedLoading
           maxClusterRadius={60}
@@ -182,7 +153,7 @@ export default function DiscoveryMap({
             <Marker
               key={project.id}
               position={[project.latitude, project.longitude]}
-              icon={getOtherLocationIcon(
+              icon={getPropertyMarkerIcon(
                 project.name,
                 selectedProperty?.id === project.id
               )}
@@ -206,11 +177,13 @@ export default function DiscoveryMap({
                 keepInView
               >
                 <Link
-                  href={`/property-for-sale-in/${project.city.toLowerCase()}/${project.slug.toLowerCase()}/${project.id}`}
+                  href={`/property-for-sale-in/${project.city.toLowerCase()}/${project.slug.toLowerCase()}/${
+                    project.id
+                  }`}
                   target="_blank"
                   className="block"
                 >
-                  <div className="flex gap-3 overflow-hidden text-gray-500 bg-white ">
+                  <div className="flex gap-3 bg-white text-gray-600">
                     {/* IMAGE */}
                     <div className="relative w-40 shrink-0">
                       <Image
@@ -225,12 +198,12 @@ export default function DiscoveryMap({
                     </div>
 
                     {/* CONTENT */}
-                    <div className="flex flex-1  flex-col gap-2 ">
-                      <h3 className="line-clamp-2 text-base text-black font-semibold">
+                    <div className="flex flex-1 flex-col gap-2">
+                      <h3 className="line-clamp-2 text-base font-semibold text-black">
                         {project.name}
                       </h3>
 
-                      <div className="flex justify-between w-full gap-2 items-center text-xs text-gray-600">
+                      <div className="flex items-center justify-between text-xs">
                         <span className="flex items-center gap-1">
                           <LocationIcon width={18} height={18} />
                           {project.micromarket}
@@ -242,7 +215,7 @@ export default function DiscoveryMap({
                         />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="grid grid-cols-2 gap-2 border-b border-gray-300 pb-2 text-xs">
                         <span className="flex items-center gap-1">
                           <BudgetIcon width={18} height={18} />
                           {formatPrice(project.minPrice, false)} –{" "}
@@ -261,12 +234,13 @@ export default function DiscoveryMap({
 
                         <span className="flex items-center gap-1">
                           <LandAreaIcon width={18} height={18} />
-                          {project.minSaleableArea}–{project.maxSaleableArea} sqft
+                          {project.minSaleableArea}–{project.maxSaleableArea}{" "}
+                          sqft
                         </span>
                       </div>
 
-                      <div className="pt-2 text-right text-xs font-medium text-purple-600">
-                        View Details →
+                      <div className=" text-right text-xs font-medium text-purple-600 hover:underline">
+                        View Details 
                       </div>
                     </div>
                   </div>

@@ -4,7 +4,7 @@ export const BudgetIcon: React.FC<IconSvgProps> = ({
   size,
   width = 48,
   height = 48,
-  color = "#292D32",
+  color = "oklch(55.8% 0.288 302.321)",
   ...props
 }) => (
   <svg width={width} height={height} viewBox="0 0 49 48" fill="none" {...props}>
