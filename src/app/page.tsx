@@ -9,8 +9,37 @@ import DiscoveryMapClient from "@/components/dicovery-map-client";
 export const metadata: Metadata = {
   title: "Discover Properties in Bangalore | Real Estate Listings",
   description:
-    "Browse residential properties in Bangalore with map view and pagination.",
+    "Browse residential properties in Bangalore with interactive map view, filters, and pagination.",
+
+  metadataBase: new URL("https://propsoch-assignmentt.vercel.app/"), 
+
+  openGraph: {
+    title: "Discover Properties in Bangalore",
+    description:
+      "Explore residential properties in Bangalore using an interactive map and detailed listings.",
+    url: "https://propsoch-assignmentt.vercel.app/",
+    siteName: "Property Discovery",
+    images: [
+      {
+        url: "/hero.png",
+        width: 1200,
+        height: 630,
+        alt: "Property discovery map view",
+      },
+    ],
+    type: "website",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Discover Properties in Bangalore",
+    description:
+      "Browse residential properties with map-based discovery and rich details.",
+    images: ["/hero.png"],
+  },
+
 };
+
 
 const PAGE_SIZE = 6;
 // async function to simulate fetching paginated data
