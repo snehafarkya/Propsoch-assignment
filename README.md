@@ -33,7 +33,7 @@ The goal of this assignment was to:
   - Animates the map to the marker location
   - Opens the corresponding popup programmatically
 
-#### ✔ SSR-safe Leaflet integration (TODO resolved)
+#### SSR-safe Leaflet integration (TODO resolved)
 - Removed direct Leaflet imports from Server Components
 - Ensured all Leaflet usage runs **only in Client Components**
 - Eliminated `window is not defined` runtime errors
@@ -95,7 +95,7 @@ The goal of this assignment was to:
 ## Live link
 
 This app is deployed on vercel and hosted on GitHub. Here are the respective links:
-GitHub: https://github.com/snehafarkya/Propsoch-assignment
-Live: https://github.com/snehafarkya/Propsoch-assignment
+- GitHub: https://github.com/snehafarkya/Propsoch-assignment
+- Live: https://github.com/snehafarkya/Propsoch-assignment
 
-Looking forward for a positive response. 
+Looking forward to a positive response. 
