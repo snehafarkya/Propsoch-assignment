@@ -65,6 +65,9 @@ export default async function Page({
         )}
         <InfiniteHorizontalScroll />
         {/* MAP VIEW */}
+          <h1 className="text-4xl font-bold text-purple-600">
+            Property Map
+          </h1>
         <section className="w-full overflow-hidden rounded-lg">
           <DiscoveryMapClient allFilteredData={PropertyListing} />
         </section>

@@ -1,5 +1,5 @@
 # 🗺️ Property Discovery Map — Assignment Submission
-
+![hero image](./src/assets/hero.png)
 A property discovery experience built with **Next.js (App Router)** and **React Leaflet**, focusing on map-based exploration, clean UX, and Correct Server side Rendering.
 
 This repository contains the **completed solution** for the frontend engineer assignment.  

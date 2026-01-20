@@ -12,7 +12,7 @@ export const PropscoreRating = ({
   width?: number
   height?: number
 }) => {
-  let calculateFilledPercent = (rating / 5) * 100
+  const calculateFilledPercent = (rating / 5) * 100
   return (
     <div className={cn("relative", className)}>
       <RatingUnfilled width={width} height={height} />
