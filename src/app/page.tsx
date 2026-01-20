@@ -1,20 +1,17 @@
 import type { Metadata } from "next";
-import DiscoveryMap from "@/components/discovery-map";
 import { PropertyListing } from "@/data/property-listing";
-import Image from "next/image";
-import Link from "next/link";
-import { formatPrice, concatenateTypologies } from "@/utils/helpers";
-import heroImg from "../assets/heroimg.png";
+import PropertyList from "@/components/listView";
+import Pagination from "@/components/pagination";
 import PropertyGrid from "@/components/propertyGrid";
 import InfiniteHorizontalScroll from "@/components/infiniteScroll";
-import Pagination from "@/components/pagination";
+
 /* --------------------------------------------
    METADATA
 ---------------------------------------------*/
 export const metadata: Metadata = {
-  title: "Discover Properties | Propsoch Assignment",
+  title: "Discover Properties in Bangalore | Real Estate Listings",
   description:
-    "Explore real estate projects with map and list views. Browse properties with pagination and detailed insights.",
+    "Explore premium residential properties across Bangalore with search and pagination.",
 };
 
 /* --------------------------------------------
@@ -23,7 +20,7 @@ export const metadata: Metadata = {
 const PAGE_SIZE = 6;
 
 /* --------------------------------------------
-   SAFE PAGE PARSER
+   UTILS
 ---------------------------------------------*/
 function parsePage(value: unknown): number {
   const page = Number(value);
@@ -31,78 +28,113 @@ function parsePage(value: unknown): number {
 }
 
 /* --------------------------------------------
-   PAGE (SSR + ASYNC searchParams)
+   PAGE (SSR)
 ---------------------------------------------*/
 export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  // ✅ MUST await searchParams (NEW RULE)
+  // Required in Next.js 16+
   const resolvedSearchParams = await searchParams;
 
+  /* --------------------------------------------
+     SEARCH PARAMS
+  ---------------------------------------------*/
   const rawPage = resolvedSearchParams.page;
   const pageValue = Array.isArray(rawPage) ? rawPage[0] : rawPage;
   const currentPage = parsePage(pageValue);
 
-  const totalItems = PropertyListing.projects.length;
-  const totalPages = Math.ceil(totalItems / PAGE_SIZE);
+  const searchQuery =
+    typeof resolvedSearchParams.q === "string"
+      ? resolvedSearchParams.q.toLowerCase()
+      : "";
 
-  const safePage = currentPage > totalPages ? totalPages : currentPage;
-
-  const startIndex = (safePage - 1) * PAGE_SIZE;
-  const endIndex = startIndex + PAGE_SIZE;
-
-  const paginatedProjects = PropertyListing.projects.slice(
-    startIndex,
-    endIndex
+  /* --------------------------------------------
+     FILTER (SEARCH ACROSS ALL LISTINGS)
+  ---------------------------------------------*/
+  const filteredProjects = PropertyListing.projects.filter((property) =>
+    [
+      property.name,
+      property.city,
+      property.micromarket,
+      property.developerName,
+      property.type,
+    ]
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery)
   );
 
+  /* --------------------------------------------
+     PAGINATION
+  ---------------------------------------------*/
+  const totalItems = filteredProjects.length;
+  const totalPages = Math.ceil(totalItems / PAGE_SIZE);
+
+  const safePage =
+    totalPages === 0 ? 1 : currentPage > totalPages ? totalPages : currentPage;
+
+  const startIndex = (safePage - 1) * PAGE_SIZE;
+  const paginatedProjects = filteredProjects.slice(
+    startIndex,
+    startIndex + PAGE_SIZE
+  );
+
+  /* --------------------------------------------
+     RENDER
+  ---------------------------------------------*/
   return (
-    <div className="min-h-screen text-black w-full">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-0 flex flex-col gap-10 py-6">
-        {/* LIST VIEW */}
-        <section className="flex flex-col gap-6">
-          <div className="flex md:flex-row flex-col justify-center  mt-6 items-center ">
-            <div className="text-center">
-              <h1 className="text-5xl font-bold text-center text-purple-600">
-                Property Listings
-              </h1>
-              <p className=" font-medium text-gray-600 pt-2 max-w-xl">
-                Discover premium residential properties in Bengalurus most
-                sought-after neighborhoods
-              </p>
-              {/* <Link
-                href={"#list"}
-                className="bg-white text-purple-600 px-4 py-2 border rounded-lg cursor-pointer hover:bg-purple-50 border-purple-500 transform transition-transform font-medium text-base "
-              >
-                View here
-              </Link> */}
-            </div>
-
-            {/* <Image className=" drop-shadow-2xl " src={heroImg} alt="Image" /> */}
-          </div>
-          {/* <div className="max-w-7xl mx-auto">
-            <InfiniteHorizontalScroll />
-          </div> */}
-          <PropertyGrid properties={paginatedProjects} />
+    <div className="min-h-screen w-full bg-gray-50 text-black">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10 px-4 py-8 sm:px-6">
+        {/* HEADER */}
+        <section className="flex flex-col items-center gap-3 text-center">
+          <h1 className="text-4xl font-bold text-purple-600">
+            Property Listings
+          </h1>
+          <p className="max-w-xl text-gray-600">
+            Discover premium residential properties in Bangalore’s most
+            sought-after neighborhoods.
+          </p>
         </section>
+        {/* SEARCH (SSR FORM) */}
+        <form className=" flex w-full content-end ml-auto max-w-sm gap-3">
+          <input
+            name="q"
+            defaultValue={searchQuery}
+            placeholder="Search by project, location, builder..."
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
 
+          <button
+            type="submit"
+            className="rounded-lg bg-purple-600 px-6 py-2 text-sm font-medium text-white transition hover:bg-purple-700"
+          >
+            Search
+          </button>
+        </form>
+        {/* LIST VIEW */}
+        <div className="hidden md:block">
+          <PropertyList properties={paginatedProjects} />
+        </div>
+        <div className="md:hidden block">
+          <PropertyGrid properties={paginatedProjects} />{" "}
+        </div>
         {/* PAGINATION */}
-        <Pagination
-  currentPage={safePage}
-  totalPages={totalPages}
-  basePath="/"
-  maxVisiblePages={6}
-/>
-<div className="max-w-7xl mx-auto">
-            <InfiniteHorizontalScroll />
-          </div>
-
-        {/* MAP VIEW */}
-        <div className="h-[60vh] w-full rounded-lg overflow-hidden">
-        <DiscoveryMap allFilteredData={PropertyListing} />
-      </div>
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={safePage}
+            totalPages={totalPages}
+            basePath="/"
+            maxVisiblePages={4}
+            query={{ q: searchQuery }}
+          />
+        )}
+        <InfiniteHorizontalScroll />
+        {/* MAP VIEW */}{" "}
+        {/* <div className="h-[60vh] w-full rounded-lg overflow-hidden"> 
+          <DiscoveryMap allFilteredData={PropertyListing} /> 
+        </div> */}
       </div>
     </div>
   );

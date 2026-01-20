@@ -13,7 +13,7 @@ export default function PropertyGrid({
   return (
     <div
       id="list"
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-content-center place-items-center gap-10"
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:place-content-center md:place-items-center gap-10"
     >
       {properties.map((property) => (
         <div

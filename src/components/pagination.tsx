@@ -3,15 +3,17 @@ import Link from "next/link";
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  basePath?: string;
+  basePath: string;
   maxVisiblePages?: number;
+  query?: Record<string, string | number | undefined>;
 }
 
 export default function Pagination({
   currentPage,
   totalPages,
-  basePath = "/",
-  maxVisiblePages = 6,
+  basePath,
+  maxVisiblePages = 5,
+  query = {},
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
@@ -30,9 +32,9 @@ export default function Pagination({
     (_, i) => startPage + i
   );
 
-  const createHref = (page: number) => ({
+  const buildHref = (page: number) => ({
     pathname: basePath,
-    query: { page },
+    query: { ...query, page },
   });
 
   return (
@@ -42,12 +44,12 @@ export default function Pagination({
     >
       {/* PREVIOUS */}
       <Link
-        href={createHref(currentPage - 1)}
+        href={buildHref(Math.max(1, currentPage - 1))}
         aria-disabled={currentPage === 1}
-        className={`px-3 py-2 rounded-md border text-sm transition ${
+        className={`rounded-md border px-3 py-2 text-sm transition ${
           currentPage === 1
             ? "pointer-events-none opacity-40"
-            : "bg-black text-white hover:bg-gray-100 hover:text-black"
+            : "bg-white hover:bg-gray-100"
         }`}
       >
         Prev
@@ -60,9 +62,9 @@ export default function Pagination({
         return (
           <Link
             key={page}
-            href={createHref(page)}
+            href={buildHref(page)}
             aria-current={isActive ? "page" : undefined}
-            className={`px-4 py-2 rounded-md border text-sm transition ${
+            className={`rounded-md px-4 py-2 text-sm transition ${
               isActive
                 ? "bg-black text-white"
                 : "bg-white hover:bg-gray-100"
@@ -75,12 +77,12 @@ export default function Pagination({
 
       {/* NEXT */}
       <Link
-        href={createHref(currentPage + 1)}
+        href={buildHref(Math.min(totalPages, currentPage + 1))}
         aria-disabled={currentPage === totalPages}
-        className={`px-3 py-2 rounded-md border text-sm transition ${
+        className={`rounded-md border px-3 py-2 text-sm transition ${
           currentPage === totalPages
             ? "pointer-events-none opacity-40"
-            : "bg-black text-white hover:bg-gray-100 hover:text-black"
+            : "bg-white hover:bg-gray-100"
         }`}
       >
         Next
