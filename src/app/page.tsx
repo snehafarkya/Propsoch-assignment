@@ -4,6 +4,7 @@ import PropertyList from "@/components/listView";
 import Pagination from "@/components/pagination";
 import PropertyGrid from "@/components/propertyGrid";
 import InfiniteHorizontalScroll from "@/components/infiniteScroll";
+import DiscoveryMap from "@/components/discovery-map";
 
 /* --------------------------------------------
    METADATA
@@ -98,7 +99,7 @@ export default async function Page({
           </p>
         </section>
         {/* SEARCH (SSR FORM) */}
-        <form className=" flex w-full content-end ml-auto max-w-sm gap-3">
+        <form className=" flex w-full content-end md:ml-auto mx-auto max-w-sm gap-3">
           <input
             name="q"
             defaultValue={searchQuery}
@@ -132,9 +133,9 @@ export default async function Page({
         )}
         <InfiniteHorizontalScroll />
         {/* MAP VIEW */}{" "}
-        {/* <div className="h-[60vh] w-full rounded-lg overflow-hidden"> 
+        <div className="w-full rounded-lg overflow-hidden"> 
           <DiscoveryMap allFilteredData={PropertyListing} /> 
-        </div> */}
+        </div>
       </div>
     </div>
   );

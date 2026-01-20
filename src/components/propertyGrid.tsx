@@ -2,6 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, concatenateTypologies } from "@/utils/helpers";
 import { projectListing } from "@/types/types";
+import { BudgetIcon } from "@/assets/budget-icon";
+import { HouseIcon } from "@/assets/house-icon";
+import { LocationIcon } from "@/assets/location-icon";
 
 interface PropertyGridProps {
   properties: projectListing[];
@@ -41,21 +44,25 @@ export default function PropertyGrid({
             <h3 className="border-b border-gray-200 pb-4 text-lg font-semibold sm:text-xl line-clamp-2">
               {property.name}
               <p className="mt-1 text-sm font-normal text-gray-600">
+               <LocationIcon width={16} height={16} className="inline-block mr-1"/>
                 {property.micromarket}, {property.city}
               </p>
             </h3>
 
-            <p className="text-sm text-gray-500">
+            <span className="text-sm text-gray-500">
               Price Range:{" "}
               <span className="font-medium">
+                <BudgetIcon className="inline-block" width={18} height={16}/>
                 {formatPrice(property.minPrice, false)} –{" "}
                 {formatPrice(property.maxPrice, false)}
               </span>
-            </p>
+            </span>
 
             <p className="truncate text-sm text-gray-500">
               Property type:{" "}
+
               <span className="font-medium">
+                <HouseIcon className="inline-block" width={18} height={16}/>
                 {concatenateTypologies(property.typologies)}
               </span>
             </p>
@@ -65,7 +72,7 @@ export default function PropertyGrid({
               <div className="flex flex-col items-center gap-1">
                 <p className="text-gray-500">Area</p>
                 <p className="text-purple-600">
-                  {property.landArea}
+                  {property.landArea} sqft
                 </p>
               </div>
 
