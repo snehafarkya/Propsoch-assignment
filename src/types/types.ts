@@ -21,7 +21,7 @@ export interface projectListing {
   latitude: number
   longitude: number
   developerName: string
-  landArea: string
+  landArea: number
 }
 
 export interface LocationType {
