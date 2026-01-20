@@ -32,9 +32,8 @@ export default function PropertyList({ properties }: PropertyListProps) {
           href={`/property-for-sale-in/${property.city.toLowerCase()}/${
             property.slug
           }/${property.id}`}
+          className="relative group first:rounded-t-2xl last:rounded-b-2xl flex flex-col hover:shadow-sm sm:flex-row gap-4 p-4 hover:bg-purple-50/40 transition"
         >
-          <div className="relative group flex flex-col hover:shadow-sm sm:flex-row gap-4 p-4 first:rounded-t-2xl last:rounded-b-2xl hover:bg-purple-50/40 transition">
-            {/* IMAGE */}
             <div className="relative h-40 sm:h-28 sm:w-44 w-full shrink-0 overflow-hidden rounded-xl">
               <Image
                 src={property.image}
@@ -48,7 +47,6 @@ export default function PropertyList({ properties }: PropertyListProps) {
               </span>
             </div>
 
-            {/* CONTENT */}
             <div className="flex flex-1 flex-col justify-between gap-2">
               <div className="flex gap-2 items-start">
                 <div>
@@ -105,7 +103,6 @@ export default function PropertyList({ properties }: PropertyListProps) {
                 View Details
               </button>
             </div>
-          </div>
         </Link>
       ))}
     </div>
